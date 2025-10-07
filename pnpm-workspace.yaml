@@ -3,3 +3,6 @@ minimumReleaseAge: 2880
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
+
+minimumReleaseAgeExclude:
+  - '@tktb-tess/brainf_ck-interpreter'

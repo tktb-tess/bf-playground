@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-@theme {
+@theme inline {
   --font-sans: 'Inter-Variable', 'Arial', 'Helvetica Neue', 'Noto Sans JP',
     sans-serif, system-ui;
 }
@@ -9,6 +9,15 @@
 @layer base {
   #app {
     @apply prose dark:prose-invert prose-slate max-w-320 mx-auto px-4 prose-h1:font-extralight
-    prose-h1:my-12 prose-h1:text-center prose-headings:font-normal;
+    prose-h1:my-12 prose-h1:text-center prose-h1:lg:text-5xl prose-headings:font-normal prose-a:hover:opacity-75;
+  }
+
+  button {
+    @apply bg-slate-600 dark:bg-white rounded text-white dark:text-black px-2 py-1 hover:opacity-75 cursor-pointer;
+  }
+
+  textarea {
+    resize: none;
+    @apply w-full block h-32 font-mono px-2 bg-white border border-slate-400 rounded;
   }
 }
