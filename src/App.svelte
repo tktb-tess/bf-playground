@@ -45,7 +45,7 @@
       id="result"
       value={result.isOk()
         ? result.value
-        : `${result.error.name} ${result.error.message}`}
+        : `${result.error.name}: ${result.error.message}`}
       readonly
       class={result.isErr() ? 'text-red-500' : ''}
     ></textarea>

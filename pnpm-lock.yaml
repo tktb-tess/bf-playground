@@ -18,8 +18,8 @@ importers:
         specifier: ^4.1.14
         version: 4.1.14(vite@7.1.9(@types/node@24.6.2)(jiti@2.6.1)(lightningcss@1.30.1))
       '@tktb-tess/brainf_ck-interpreter':
-        specifier: ^0.2.2
-        version: 0.2.2
+        specifier: ^0.2.3
+        version: 0.2.3
       '@tsconfig/svelte':
         specifier: ^5.0.5
         version: 5.0.5
@@ -466,8 +466,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7
 
-  '@tktb-tess/brainf_ck-interpreter@0.2.2':
-    resolution: {integrity: sha512-OEHph7qNlmJztbMc4SlTYUwxf7AA1Ejc/WI7/3jD6W9E96JmSoaN/59ijnVvcsSzFbjqJf24xlQABWGmGHKasg==}
+  '@tktb-tess/brainf_ck-interpreter@0.2.3':
+    resolution: {integrity: sha512-HS+mPvwRZQOUF211cwiWv3/hj+CuZxgNwPgwDoQr7bAQYHtw1cPXp9mvE9UzwRXDKWoQQ41nrEPXlvuaHZJ5Yw==}
     engines: {node: ^22, pnpm: ^10}
 
   '@tsconfig/svelte@5.0.5':
@@ -1204,7 +1204,7 @@ snapshots:
       tailwindcss: 4.1.14
       vite: 7.1.9(@types/node@24.6.2)(jiti@2.6.1)(lightningcss@1.30.1)
 
-  '@tktb-tess/brainf_ck-interpreter@0.2.2': {}
+  '@tktb-tess/brainf_ck-interpreter@0.2.3': {}
 
   '@tsconfig/svelte@5.0.5': {}
 
