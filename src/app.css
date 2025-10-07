@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: 'Inter-Variable', 'Arial', 'Helvetica Neue', 'Noto Sans JP',
+    sans-serif, system-ui;
+}
+
+@layer base {
+  #app {
+    @apply prose dark:prose-invert prose-slate max-w-320 mx-auto px-4 prose-h1:font-extralight
+    prose-h1:my-12 prose-h1:text-center prose-headings:font-normal;
+  }
+}
