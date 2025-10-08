@@ -42,3 +42,4 @@
     ></textarea>
   </div>
 </main>
+<div class="h-10"></div>
