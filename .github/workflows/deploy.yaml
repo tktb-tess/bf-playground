@@ -2,7 +2,8 @@ name: Deploy to Github Pages
 
 on:
   push:
-    tags: 'v*'
+    branches:
+      - main
 
   workflow_dispatch:
 
@@ -12,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: pages
   cancel-in-progress: true
 
 jobs:
@@ -33,7 +34,7 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Install Deps
+      - name: Install Dependencies
         run: pnpm i --frozen-lockfile
 
       - name: Build Vite

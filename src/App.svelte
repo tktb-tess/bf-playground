@@ -1,7 +1,7 @@
 <script lang="ts">
   import { exec as exec_ } from '@tktb-tess/brainf_ck-interpreter';
   import { Result } from 'neverthrow';
-  const title = 'bf-playground';
+  const title = 'BF Playground';
   let code = $state(
     '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.'
   );
@@ -19,15 +19,6 @@
 
   let result = $state(exec(''));
 </script>
-
-<svelte:head>
-  <title>{title}</title>
-  <link
-    rel="stylesheet"
-    href="https://api.tktb-tess.dev/fonts/Inter/font-face.css"
-    crossorigin="anonymous"
-  />
-</svelte:head>
 
 <header>
   <h1>{title}</h1>
@@ -51,3 +42,4 @@
     ></textarea>
   </div>
 </main>
+<div class="h-10"></div>
