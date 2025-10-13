@@ -18,6 +18,6 @@
 
   textarea {
     resize: none;
-    @apply w-full block h-32 font-mono px-2 bg-white border border-slate-400 rounded;
+    @apply w-full block h-32 font-mono px-2 bg-white text-black border border-slate-400 rounded;
   }
 }

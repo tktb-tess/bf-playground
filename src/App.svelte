@@ -25,7 +25,7 @@
   <h1>{title}</h1>
 </header>
 <main>
-  <p><a href="../">戻る</a></p>
+  <p><a href="/.">戻る</a></p>
   <p>Brainf*ck の簡易的な実行環境です。</p>
 
   <div class="flex flex-col gap-2">
@@ -47,7 +47,7 @@
       id="result"
       value={result.isOk()
         ? result.value
-        : `${result.error.name}: ${result.error.message}`}
+        : `${result.error.name}: ${result.error.message}, ${result.error.cause}`}
       readonly
       class={result.isErr() ? 'text-red-500' : ''}
     ></textarea>
