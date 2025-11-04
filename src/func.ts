@@ -1,16 +1,16 @@
 import AsyncWorker from '@tktb-tess/async-worker';
-import type { BFExecArguments } from './type';
+import type { BFExecOptions } from './type';
 import { ResultAsync } from 'neverthrow';
 import { BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
 
 const w = new Worker(new URL('worker.ts', import.meta.url), { type: 'module' });
 
-const worker = new AsyncWorker<BFExecArguments, string>(w);
+const worker = new AsyncWorker<
+  { code: string; options: BFExecOptions },
+  string
+>(w);
 
-export const exec = (
-  code: BFExecArguments['code'],
-  options: BFExecArguments['options'] = {}
-) => {
+export const exec = (code: string, options: BFExecOptions = {}) => {
   worker.postMessage({ code, options });
 
   const ans = worker.receive().then((a) => {

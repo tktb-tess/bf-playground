@@ -1,10 +1,10 @@
 import { exec, BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
-import type { BFExecArguments } from './type';
+import type { BFExecOptions } from './type';
 import type { MessageResult } from '@tktb-tess/async-worker';
 
 globalThis.addEventListener(
   'message',
-  (e: MessageEvent<[number, BFExecArguments]>) => {
+  (e: MessageEvent<[number, { code: string; options: BFExecOptions }]>) => {
     const [id, req] = e.data;
     const { code, options } = req;
 
