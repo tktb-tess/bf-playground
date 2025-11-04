@@ -1,4 +1,4 @@
-import { exec } from '@tktb-tess/brainf_ck-interpreter';
+import { exec, BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
 import type { BFExecArguments } from './type';
 import type { MessageResult } from '@tktb-tess/async-worker';
 
@@ -14,15 +14,20 @@ globalThis.addEventListener(
       const ans = {
         success: true,
         value,
-      } satisfies MessageResult<string, Error>;
+      } satisfies MessageResult<string, BFRuntimeError>;
 
       postMessage([id, ans]);
     } catch (e) {
       const ans = {
         success: false,
         error:
-          e instanceof Error ? e : Error('UnidentifiedError', { cause: e }),
-      } satisfies MessageResult<string, Error>;
+          e instanceof BFRuntimeError
+            ? e
+            : new BFRuntimeError(
+                e instanceof Error ? e.message : 'UnidentifiedError',
+                { cause: e }
+              ),
+      } satisfies MessageResult<string, BFRuntimeError>;
       postMessage([id, ans]);
     }
   }

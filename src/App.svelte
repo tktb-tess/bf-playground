@@ -15,7 +15,9 @@
   let resultA: ResultAsync<string, Error> = $state(okAsync(''));
 
   $effect(() => {
-    resultA.orTee((e) => console.error(e));
+    resultA.orTee((e) => {
+      console.log(Object.getOwnPropertyDescriptors(e));
+    });
   });
 </script>
 
@@ -42,7 +44,7 @@
     </button>
     <label for="result" class="text-center">実行結果</label>
     {#await resultA}
-      <textarea id="result" value="Executing..." readonly></textarea>
+      <textarea id="result" readonly>Executing...</textarea>
     {:then result}
       <textarea
         id="result"
