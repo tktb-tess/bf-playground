@@ -4,22 +4,17 @@ import * as U from '@tktb-tess/brainf_ck-interpreter';
 import './app.css';
 import App from './App.svelte';
 
-const iii = { ...U };
-Object.defineProperty(iii, Symbol.toStringTag, {
-  value: 'BFInterpreter',
-});
-Object.setPrototypeOf(iii, null);
-Object.freeze(iii);
+const o = {
+  AsyncWorker,
+  ...U,
+  __proto__: null,
+} as const;
 
-Object.defineProperties(window, {
-  BFInterpreter: {
-    value: iii,
-    enumerable: true,
-  },
-  AsyncWorker: {
-    value: AsyncWorker,
-    enumerable: true,
-  },
+Object.freeze(o);
+
+Object.defineProperty(window, '__tktb_funcs', {
+  value: o,
+  enumerable: true,
 });
 
 const app = mount(App, {

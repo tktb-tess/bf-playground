@@ -1,7 +1,4 @@
-export type BFExecArguments = {
-  code: string;
-  options: {
-    input?: string;
-    initBuffLength?: number;
-  };
+export type BFExecOptions = {
+  input?: string;
+  initBuffLength?: number;
 };
