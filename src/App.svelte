@@ -1,24 +1,22 @@
 <script lang="ts">
-  import { exec as exec_ } from '@tktb-tess/brainf_ck-interpreter';
-  import { Result, ok } from 'neverthrow';
+  import { exec } from './func';
+  import { ResultAsync, okAsync } from 'neverthrow';
   const title = 'BF Playground';
   let code = $state(
     '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.'
   );
+
   let input = $state('');
-  const exec = Result.fromThrowable(exec_, (e) => {
-    if (e instanceof Error) {
-      return e;
-    } else {
-      return Error(`${e}`, { cause: e });
-    }
-  });
 
   const handleClick = () => {
-    result = exec(code, { input: input });
+    resultA = exec(code, { input: input });
   };
 
-  let result: Result<string, Error> = $state(ok(''));
+  let resultA: ResultAsync<string, Error> = $state(okAsync(''));
+
+  $effect(() => {
+    resultA.orTee((e) => console.error(e));
+  });
 </script>
 
 <header>
@@ -43,14 +41,20 @@
       実行
     </button>
     <label for="result" class="text-center">実行結果</label>
-    <textarea
-      id="result"
-      value={result.isOk()
-        ? result.value
-        : `${result.error.name}: ${result.error.message}, ${result.error.cause}`}
-      readonly
-      class={result.isErr() ? 'text-red-500' : ''}
-    ></textarea>
+    {#await resultA}
+      <textarea id="result" value="Executing..." readonly></textarea>
+    {:then result}
+      <textarea
+        id="result"
+        value={result.isOk()
+          ? result.value
+          : `${result.error.name}: ${result.error.message}${result.error.cause ? `, ${result.error.cause}` : ''}`}
+        readonly
+        class={result.isErr() ? 'text-red-500' : ''}
+      ></textarea>
+    {:catch}
+      <p>Unintended Error</p>
+    {/await}
   </div>
 </main>
 <div class="h-10"></div>

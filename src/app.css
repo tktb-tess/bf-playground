@@ -8,7 +8,7 @@
 
 @layer base {
   #app {
-    @apply prose dark:prose-invert prose-slate max-w-320 mx-auto px-4 prose-h1:font-extralight
+    @apply prose dark:prose-invert prose-slate max-w-7xl mx-auto px-4 prose-h1:font-extralight
     prose-h1:my-12 prose-h1:text-center prose-h1:lg:text-5xl prose-headings:font-normal prose-a:hover:opacity-75;
   }
 

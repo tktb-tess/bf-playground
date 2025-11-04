@@ -5,4 +5,4 @@ onlyBuiltDependencies:
   - esbuild
 
 minimumReleaseAgeExclude:
-  - '@tktb-tess/brainf_ck-interpreter'
+  - '@tktb-tess/*'
