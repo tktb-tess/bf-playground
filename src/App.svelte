@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
   import { exec } from './func';
   import { ResultAsync, okAsync } from 'neverthrow';
   const title = 'BF Playground';
@@ -12,11 +13,11 @@
     resultA = exec(code, { input: input });
   };
 
-  let resultA: ResultAsync<string, Error> = $state(okAsync(''));
+  let resultA: ResultAsync<string, BFRuntimeError> = $state(okAsync(''));
 
   $effect(() => {
     resultA.orTee((e) => {
-      console.log(Object.getOwnPropertyDescriptors(e));
+      console.log(e.name, e.message, e.stack, e.cause);
     });
   });
 </script>

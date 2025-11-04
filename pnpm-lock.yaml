@@ -21,8 +21,8 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1
       '@tktb-tess/brainf_ck-interpreter':
-        specifier: ^0.3.1
-        version: 0.3.1
+        specifier: ^0.3.3
+        version: 0.3.3
       '@tsconfig/svelte':
         specifier: ^5.0.5
         version: 5.0.5
@@ -471,8 +471,8 @@ packages:
   '@tktb-tess/async-worker@0.4.1':
     resolution: {integrity: sha512-2zLgoMFFSCD45N1rl994OjCT8gGvn6fhHRjStKtpDuI7Gnan0Lbv0uKNiNaIJTvlJgplunsPbNUapSkQ/Q7r8w==}
 
-  '@tktb-tess/brainf_ck-interpreter@0.3.1':
-    resolution: {integrity: sha512-dwriEqQH/fPSc5vpICT7kUUQABRdEhDedpdIYHO5F6yBM3ofgctOhYAS+zGZ+vlCROy3ek9oz8WzMvEv9Tt4gw==}
+  '@tktb-tess/brainf_ck-interpreter@0.3.3':
+    resolution: {integrity: sha512-fvIdL+BQAkcSpxivEln2ZutD6mSXJoKaBj1g1y+PJl2rQlkp+7nYhu4Fvu0ILvdf1EH48RBnKLC/7cY4wgjLGw==}
     engines: {node: ^22, pnpm: ^10}
 
   '@tsconfig/svelte@5.0.5':
@@ -1160,7 +1160,7 @@ snapshots:
 
   '@tktb-tess/async-worker@0.4.1': {}
 
-  '@tktb-tess/brainf_ck-interpreter@0.3.1': {}
+  '@tktb-tess/brainf_ck-interpreter@0.3.3': {}
 
   '@tsconfig/svelte@5.0.5': {}
 

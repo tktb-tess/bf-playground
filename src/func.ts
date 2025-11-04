@@ -1,6 +1,7 @@
 import AsyncWorker from '@tktb-tess/async-worker';
 import type { BFExecArguments } from './type';
 import { ResultAsync } from 'neverthrow';
+import { BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
 
 const w = new Worker(new URL('worker.ts', import.meta.url), { type: 'module' });
 
@@ -19,11 +20,22 @@ export const exec = (
     return a;
   });
 
-  return ResultAsync.fromPromise(ans, (e) => {
-    if (e instanceof Error) {
-      return e;
+  return ResultAsync.fromPromise(ans, (_e) => {
+    if (_e == null) {
+      return new BFRuntimeError('UnidentifiedError');
+    }
+
+    const e = _e as {
+      name?: string;
+    };
+
+    if (e?.name === 'BFRuntimeError') {
+      return e as BFRuntimeError;
     } else {
-      return Error(`${e}`, { cause: e });
+      return new BFRuntimeError(
+        e instanceof Error ? e.message : 'UnidentifiedError',
+        e instanceof Error ? e.cause : e
+      );
     }
   });
 };
