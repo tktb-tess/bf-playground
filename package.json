@@ -3,27 +3,28 @@
   "private": true,
   "version": "0.1.2",
   "type": "module",
+  "author": "Tessyrrhaqt",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "vite preview",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.16",
+    "@tailwindcss/vite": "^4.1.17",
     "@tktb-tess/async-worker": "^0.4.1",
     "@tktb-tess/brainf_ck-interpreter": "^0.3.3",
-    "@tsconfig/svelte": "^5.0.5",
-    "@types/node": "^24.9.2",
+    "@tsconfig/svelte": "^5.0.6",
+    "@types/node": "^24.10.1",
     "neverthrow": "^8.2.0",
-    "svelte": "^5.43.2",
-    "svelte-check": "^4.3.3",
-    "tailwindcss": "^4.1.16",
+    "svelte": "^5.45.4",
+    "svelte-check": "^4.3.4",
+    "tailwindcss": "^4.1.17",
     "typescript": "~5.9.3",
-    "vite": "^7.1.12",
-    "vitest": "^4.0.6"
+    "vite": "^7.2.6",
+    "vitest": "^4.0.15"
   },
   "engines": {
     "node": "^22"
