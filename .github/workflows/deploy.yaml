@@ -33,9 +33,6 @@ jobs:
           cargo install wasm-bindgen-cli
           cargo install wasm-opt
 
-      - name: Build WebAssembly
-        run: pnpm run build:wasm
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -50,6 +47,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm i --frozen-lockfile
 
+      - name: Build WebAssembly
+        run: pnpm run build:wasm
+        
       - name: Build Vite
         run: pnpm run build:vite
 
