@@ -17,12 +17,6 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.17
         version: 4.1.17(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2))
-      '@tktb-tess/async-worker':
-        specifier: ^0.4.1
-        version: 0.4.1
-      '@tktb-tess/brainf_ck-interpreter':
-        specifier: ^0.3.3
-        version: 0.3.3
       '@tsconfig/svelte':
         specifier: ^5.0.6
         version: 5.0.6
@@ -467,13 +461,6 @@ packages:
     resolution: {integrity: sha512-4+9w8ZHOiGnpcGI6z1TVVfWaX/koK7fKeSYF3qlYg2xpBtbteP2ddBxiarL+HVgfSJGeK5RIxRQmKm4rTJJAwA==}
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7
-
-  '@tktb-tess/async-worker@0.4.1':
-    resolution: {integrity: sha512-2zLgoMFFSCD45N1rl994OjCT8gGvn6fhHRjStKtpDuI7Gnan0Lbv0uKNiNaIJTvlJgplunsPbNUapSkQ/Q7r8w==}
-
-  '@tktb-tess/brainf_ck-interpreter@0.3.3':
-    resolution: {integrity: sha512-fvIdL+BQAkcSpxivEln2ZutD6mSXJoKaBj1g1y+PJl2rQlkp+7nYhu4Fvu0ILvdf1EH48RBnKLC/7cY4wgjLGw==}
-    engines: {node: ^22, pnpm: ^10}
 
   '@tsconfig/svelte@5.0.6':
     resolution: {integrity: sha512-yGxYL0I9eETH1/DR9qVJey4DAsCdeau4a9wYPKuXfEhm8lFO8wg+LLYJjIpAm6Fw7HSlhepPhYPDop75485yWQ==}
@@ -1164,10 +1151,6 @@ snapshots:
       '@tailwindcss/oxide': 4.1.17
       tailwindcss: 4.1.17
       vite: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)
-
-  '@tktb-tess/async-worker@0.4.1': {}
-
-  '@tktb-tess/brainf_ck-interpreter@0.3.3': {}
 
   '@tsconfig/svelte@5.0.6': {}
 

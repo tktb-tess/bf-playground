@@ -29,10 +29,10 @@ pub fn exec(code: &str, options: BFExecOptions) -> String {
     let mut output = vec![];
     let mut i: usize = 0;
 
-    while i <= code.len() {
+    while i < code.len() {
         let c = code
             .get(i)
-            .unwrap_or_else(|| panic!("Unexpected error: index was out of range {}", i));
+            .unwrap_or_else(|| panic!("Unexpected error: index was out of range {} {:?}", i, code));
         match c {
             Next => {
                 mem.move_next();
@@ -77,4 +77,16 @@ pub fn exec(code: &str, options: BFExecOptions) -> String {
     }
     let output: String = output.try_into().unwrap_or_else(|e| panic!("{}", e));
     output
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn test1() {
+        let str = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+        let options = BFExecOptions { input: None, init_buff_len: None };
+        let result = exec(str, options);
+        assert_eq!(result, "Hello World!\n");
+    }
 }

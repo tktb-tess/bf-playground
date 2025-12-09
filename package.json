@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build:wasm": "./bash/wasm_build.sh",
-    "build": "vite build",
+    "build:vite": "vite build",
+    "build": "pnpm run build:wasm && pnpm run build:vite",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
   },
@@ -15,8 +16,6 @@
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.17",
-    "@tktb-tess/async-worker": "^0.4.1",
-    "@tktb-tess/brainf_ck-interpreter": "^0.3.3",
     "@tsconfig/svelte": "^5.0.6",
     "@types/node": "^24.10.1",
     "neverthrow": "^8.2.0",

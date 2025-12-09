@@ -5,7 +5,10 @@ rm -rf ./src/wasm
 cd ./rust
 
 echo "Compiling Rust sources to WebAssembly..."
-cargo build --release
+cargo build \
+    --release \
+    --lib \
+    --target wasm32-unknown-unknown
 
 echo "Executing wasm-bindgen..."
 wasm-bindgen \

@@ -30,14 +30,14 @@ export const asyncWorkerFactory = <TPost, TRtrn>(worker: Worker) => {
     worker.postMessage([id, msg]);
     const rslv = resolvers<TRtrn>();
     receivers.set(id, rslv);
+    
   };
 
   const receive = async () => {
     const iterRes = receivers.entries().next();
     if (iterRes.done) return;
     const [id, { promise }] = iterRes.value;
-    receivers.delete(id);
-    return promise;
+    return promise.finally(() => receivers.delete(id));
   };
 
   return {
