@@ -23,8 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: Swatinem/rust-cache@v2
-
       - name: Install WebAssembly target
         run: rustup target add wasm32-unknown-unknown
 
@@ -49,7 +47,7 @@ jobs:
 
       - name: Build WebAssembly
         run: pnpm run build:wasm
-        
+
       - name: Build Vite
         run: pnpm run build:vite
 
