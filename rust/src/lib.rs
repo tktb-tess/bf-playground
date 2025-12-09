@@ -15,6 +15,8 @@ pub struct BFExecOptions {
     pub init_buff_len: Option<usize>,
 }
 
+const CYCLE_LIMIT: u32 = 1 << 28;
+
 #[wasm_bindgen]
 pub fn exec(code: &str, options: BFExecOptions) -> String {
     let code: BFCode = code.into();
@@ -28,8 +30,11 @@ pub fn exec(code: &str, options: BFExecOptions) -> String {
     let mut input: VecDeque<_> = input.into_bytes().into_iter().collect();
     let mut output = vec![];
     let mut i: usize = 0;
-
+    let mut count: u32 = 0;
     while i < code.len() {
+        if count > CYCLE_LIMIT {
+            panic!("Exceeded limit of loop");
+        }
         let c = code
             .get(i)
             .unwrap_or_else(|| panic!("Unexpected error: index was out of range {} {:?}", i, code));
@@ -74,6 +79,7 @@ pub fn exec(code: &str, options: BFExecOptions) -> String {
             }
         }
         i += 1;
+        count += 1;
     }
     let output: String = output.try_into().unwrap_or_else(|e| panic!("{}", e));
     output

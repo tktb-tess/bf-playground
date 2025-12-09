@@ -37,8 +37,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm i --frozen-lockfile
 
+      - name: Build WebAssembly
+        run: pnpm run build:wasm
+
       - name: Build Vite
-        run: pnpm run build
+        run: pnpm run build:vite
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
