@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BFRuntimeError } from '@tktb-tess/brainf_ck-interpreter';
+  import type { BFRuntimeError } from './util';
   import { exec } from './func';
   import { ResultAsync, okAsync } from 'neverthrow';
   const title = 'BF Playground';
   let code = $state(
-    '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.'
+    '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.'
   );
 
   let input = $state('');
