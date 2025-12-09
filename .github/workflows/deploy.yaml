@@ -37,8 +37,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm i --frozen-lockfile
 
-      - name: Add WebAssembly target
-        run: rustup target add wasm32-unknown-unknown
+      - name: Install Rust & WebAssembly toolchain
+        run: |
+          rustup target add wasm32-unknown-unknown
+          cargo install wasm-bindgen-cli
+          cargo install wasm-opt
 
       - name: Build WebAssembly
         run: pnpm run build:wasm
