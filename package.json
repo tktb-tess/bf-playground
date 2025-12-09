@@ -6,6 +6,7 @@
   "author": "Tessyrrhaqt",
   "scripts": {
     "dev": "vite",
+    "build:wasm": "./bash/wasm_build.sh",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
@@ -19,7 +20,7 @@
     "@tsconfig/svelte": "^5.0.6",
     "@types/node": "^24.10.1",
     "neverthrow": "^8.2.0",
-    "svelte": "^5.45.4",
+    "svelte": "^5.45.6",
     "svelte-check": "^4.3.4",
     "tailwindcss": "^4.1.17",
     "typescript": "~5.9.3",
