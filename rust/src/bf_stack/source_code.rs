@@ -1,6 +1,8 @@
+use super::error::BFRuntimeError;
 use std::{
     ops::{Deref, DerefMut},
     result,
+    str::FromStr,
 };
 
 #[derive(Debug, Clone)]
@@ -14,22 +16,6 @@ pub enum BFCommand {
     LoopStart,
     LoopEnd,
 }
-
-// impl BFCommand {
-//     pub fn as_code_point(&self) -> u8 {
-//         use BFCommand::*;
-//         match self {
-//             Next => 0x3e,
-//             Prev => 0x3c,
-//             Increment => 0x2b,
-//             Decrement => 0x2d,
-//             Read => 0x2e,
-//             Write => 0x2c,
-//             LoopStart => 0x5b,
-//             LoopEnd => 0x5d,
-//         }
-//     }
-// }
 
 impl TryFrom<u8> for BFCommand {
     type Error = ();
@@ -69,11 +55,12 @@ impl DerefMut for BFCode {
     }
 }
 
-impl From<&str> for BFCode {
-    fn from(value: &str) -> Self {
-        let mut v = Vec::with_capacity(value.len());
+impl FromStr for BFCode {
+    type Err = BFRuntimeError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut v = Vec::with_capacity(s.len());
 
-        for c in value.as_bytes() {
+        for c in s.as_bytes() {
             if let Ok(c) = BFCommand::try_from(*c) {
                 v.push(c);
             }
@@ -81,34 +68,36 @@ impl From<&str> for BFCode {
 
         v.shrink_to_fit();
         let v = v.into_boxed_slice();
-        let maps = detect_loop(&v);
+        let maps = detect_loop(&v)?;
 
-        BFCode { commands: v, maps }
+        Ok(BFCode { commands: v, maps })
     }
 }
 
-fn detect_loop(v: &[BFCommand]) -> Box<[[usize; 2]]> {
+fn detect_loop(v: &[BFCommand]) -> Result<Box<[[usize; 2]]>, BFRuntimeError> {
     use BFCommand::*;
     let mut maps = vec![];
     let mut idxs = vec![];
     for i in 0..v.len() {
-        let com = v
-            .get(i)
-            .unwrap_or_else(|| unreachable!("unexpected error: index was out of range: {}", i));
+        let com = v.get(i).ok_or_else(|| {
+            BFRuntimeError::new(&format!("unexpected error: index was out of range: {}", i))
+        })?;
 
         if let LoopStart = com {
             idxs.push(i);
         } else if let LoopEnd = com {
             let start = idxs
                 .pop()
-                .expect("invalid code: no corresponding LoopStart");
+                .ok_or_else(|| BFRuntimeError::new("invalid code: no corresponding LoopStart"))?;
             maps.push([start, i]);
         }
     }
 
     if idxs.len() > 0 {
-        panic!("invalid code: no corresponding LoopEnd");
+        Err(BFRuntimeError::new(
+            "invalid code: no corresponding LoopEnd",
+        ))?;
     }
 
-    maps.into()
+    Ok(maps.into())
 }

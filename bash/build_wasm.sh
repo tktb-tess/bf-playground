@@ -1,15 +1,15 @@
 # !/bin/bash
-echo "Delete previous WebAssembly files..."
+echo "Delete previous WebAssembly files ..."
 rm -rf ./src/wasm
 
 cd ./rust
 
-echo "Compiling Rust sources to WebAssembly..."
+echo "Compiling Rust sources to WebAssembly ..."
 cargo build \
     --release \
     --lib
 
-echo "Executing wasm-bindgen..."
+echo "Executing wasm-bindgen ..."
 wasm-bindgen \
     --out-dir ../src/wasm \
     --typescript \
@@ -18,7 +18,7 @@ wasm-bindgen \
 
 cd ../src/wasm
 
-echo "Optimizing WebAssembly using wasm-opt..."
+echo "Optimizing WebAssembly using wasm-opt ..."
 wasm-opt ./wasm_part_bg.wasm \
     -o ./opted.wasm \
     -O
