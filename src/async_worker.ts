@@ -30,7 +30,6 @@ export const asyncWorkerFactory = <TPost, TRtrn>(worker: Worker) => {
     worker.postMessage([id, msg]);
     const rslv = resolvers<TRtrn>();
     receivers.set(id, rslv);
-    
   };
 
   const receive = async () => {
