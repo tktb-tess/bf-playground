@@ -18,7 +18,7 @@ pub struct BFExecOptions {
 const CYCLE_LIMIT: u32 = 1 << 28;
 
 #[wasm_bindgen]
-pub fn exec(code: &str, options: BFExecOptions) -> Result<String, BFRuntimeError> {
+pub fn exec(code: &str, options: BFExecOptions) -> Result<String, JsError> {
     let code: BFCode = code.parse()?;
 
     let mut mem = match options.init_buff_len {

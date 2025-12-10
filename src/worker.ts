@@ -21,7 +21,7 @@ globalThis.addEventListener(
       postMessage([id, ans]);
     } catch (e) {
       let error: BFRuntimeError;
-
+      console.log(e);
       if (e instanceof Error) {
         error = fromError(e);
       } else {

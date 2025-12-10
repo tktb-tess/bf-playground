@@ -18,7 +18,7 @@ impl BFRuntimeError {
 
 impl fmt::Display for BFRuntimeError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "BFRuntimeError: {}", self.message)
+        self.message.fmt(f)
     }
 }
 
