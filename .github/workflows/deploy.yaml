@@ -26,7 +26,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: |
-            . -> rust/target
+            ./rust -> ./rust/target
 
       - name: Install WebAssembly target
         run: rustup target add wasm32-unknown-unknown
