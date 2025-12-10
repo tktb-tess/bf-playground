@@ -51,7 +51,7 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Build WebAssembly
-        run: ./bash/wasm_build.sh
+        run: ./bash/build_wasm.sh
 
       - name: Build Vite
         run: pnpm run build
