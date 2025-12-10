@@ -7,8 +7,7 @@ cd ./rust
 echo "Compiling Rust sources to WebAssembly..."
 cargo build \
     --release \
-    --lib \
-    --target wasm32-unknown-unknown
+    --lib
 
 echo "Executing wasm-bindgen..."
 wasm-bindgen \
