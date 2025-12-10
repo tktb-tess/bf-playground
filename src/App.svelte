@@ -17,8 +17,8 @@
 
   $effect(() => {
     resultA.orTee((e) => {
-      const { name, message, stack, cause } = e;
-      console.log(name, '\n', message, '\n', stack, '\n', cause);
+      const e2 = { ...e };
+      console.log(e2);
     });
   });
 </script>

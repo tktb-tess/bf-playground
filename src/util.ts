@@ -46,8 +46,8 @@ export type Result<T, E> =
     };
 
 export const resolvers = <T>() => {
-  let resolve!: (_: T | PromiseLike<T>) => void;
-  let reject!: (_?: unknown) => void;
+  let resolve!: (value: T | PromiseLike<T>) => void;
+  let reject!: (reason?: unknown) => void;
 
   const promise = new Promise<T>((res, rej) => {
     resolve = res;
