@@ -51,10 +51,10 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Build WebAssembly
-        run: pnpm run build:wasm
+        run: ./bash/wasm_build.sh
 
       - name: Build Vite
-        run: pnpm run build:vite
+        run: pnpm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
