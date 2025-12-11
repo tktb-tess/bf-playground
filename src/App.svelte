@@ -2,7 +2,9 @@
   import type { BFRuntimeError } from './util';
   import { exec } from './func';
   import { ResultAsync, okAsync } from 'neverthrow';
+
   const title = 'BF Playground';
+
   let code = $state(
     '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.'
   );
@@ -17,8 +19,9 @@
 
   $effect(() => {
     resultA.orTee((e) => {
-      const e2 = { ...e };
-      console.log(e2);
+      for (const [k, v] of Object.entries(e)) {
+        console.log(`${k}:`, v);
+      }
     });
   });
 </script>
