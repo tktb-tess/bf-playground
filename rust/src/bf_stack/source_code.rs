@@ -57,6 +57,7 @@ impl DerefMut for BFCode {
 
 impl FromStr for BFCode {
     type Err = BFRuntimeError;
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut v = Vec::with_capacity(s.len());
 
