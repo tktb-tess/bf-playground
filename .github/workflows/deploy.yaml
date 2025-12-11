@@ -33,8 +33,8 @@ jobs:
 
       - name: Install wasm-bindgen-cli & wasm-opt
         run: |
-          cargo install wasm-bindgen-cli --lock
-          cargo install wasm-opt --lock
+          cargo install wasm-bindgen-cli --locked
+          cargo install wasm-opt --locked
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

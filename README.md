@@ -4,8 +4,8 @@ Rust と WebAssembly を利用しています。Rustの環境の他、Wasm ビ�
 
 ```bash
 rustup target add wasm32-unknown-unknown
-cargo install wasm-bindgen-cli --lock
-cargo install wasm-opt --lock
+cargo install wasm-bindgen-cli --locked
+cargo install wasm-opt --locked
 ```
 
 ```bash
