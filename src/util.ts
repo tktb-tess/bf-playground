@@ -35,7 +35,7 @@ export const fromError = (error: Error): BFRuntimeError => {
 
 export { BFRuntimeError };
 
-export type Result<T, E> =
+export type WorkerResult<T, E> =
   | {
       success: true;
       value: T;

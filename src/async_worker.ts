@@ -1,46 +1,91 @@
-import { type Result, resolvers } from './util';
+import { type WorkerResult } from './util';
 
-export const asyncWorkerFactory = <TPost, TRtrn>(worker: Worker) => {
-  const receivers: Map<number, ReturnType<typeof resolvers<TRtrn>>> = new Map();
+class Queue<T> {
+  readonly #in: T[] = [];
+  readonly #out: T[] = [];
 
-  let counter = 0;
+  get length() {
+    return this.#in.length + this.#out.length;
+  }
 
-  worker.onmessage = (e: MessageEvent<[number, Result<TRtrn, unknown>]>) => {
-    const [id, ans] = e.data;
-    const receiver = receivers.get(id);
-    if (!receiver) {
-      throw Error('Receiver Not Found');
+  #transfer = () => {
+    while (this.#in.length > 0) {
+      this.#out.push(this.#in.pop()!);
     }
-    if (ans.success) {
-      receiver.resolve(ans.value);
-    } else {
-      const err = ans.error;
+  };
 
-      receiver.reject(err);
+  enqueue = (item: T) => {
+    this.#in.push(item);
+    return this.length;
+  };
+
+  dequeue = () => {
+    if (this.#out.length === 0) {
+      this.#transfer();
     }
+    return this.#out.pop();
+  };
+
+  toArray = () => {
+    this.#transfer();
+    return this.#out.slice();
+  };
+}
+
+export const asyncWorkerFactory = <TPost, TRecv>(worker: Worker) => {
+  const queue: Queue<WorkerResult<TRecv, unknown>> = new Queue();
+
+  worker.onmessage = (e: MessageEvent<WorkerResult<TRecv, unknown>>) => {
+    queue.enqueue(e.data);
   };
 
   worker.onerror = (e) => {
-    console.error(e.message);
-    throw Error(e.message, e.error);
+    throw Error(e.message, { cause: e });
   };
 
-  const postMessage = (msg: TPost) => {
-    const id = counter++;
-    worker.postMessage([id, msg]);
-    const rslv = resolvers<TRtrn>();
-    receivers.set(id, rslv);
+  const postMessage = (
+    message: TPost,
+    options?: StructuredSerializeOptions
+  ) => {
+    worker.postMessage(message, options);
   };
 
-  const receive = async () => {
-    const iterRes = receivers.entries().next();
-    if (iterRes.done) return;
-    const [id, { promise }] = iterRes.value;
-    return promise.finally(() => receivers.delete(id));
+  const receive = () => {
+    return new Promise<TRecv>((resolve, reject) => {
+      const id = setInterval(() => {
+        if (queue.length > 0) {
+          clearInterval(id);
+          const res = queue.dequeue()!;
+
+          if (res.success) {
+            resolve(res.value);
+          } else {
+            reject(res.error);
+          }
+        }
+      }, 10);
+    });
   };
+
+  async function* iter(max: number) {
+    for (let i = 0; i < max; i++) {
+      if (queue.length > 0) {
+        const res = queue.dequeue()!;
+        if (res.success) {
+          yield res.value;
+        } else {
+          throw res.error;
+        }
+      } else {
+        yield receive();
+      }
+    }
+  }
 
   return {
     postMessage,
     receive,
+    iter,
+    worker,
   };
 };

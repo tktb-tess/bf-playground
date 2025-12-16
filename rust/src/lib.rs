@@ -5,7 +5,7 @@ use std::collections::VecDeque;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub fn exec(code: &str, options: BFOptions) -> Result<String, JsError> {
+pub fn exec_inner(code: &str, options: BFOptions) -> Result<String, JsError> {
     let code: BFCode = code.parse()?;
 
     let mut mem = match options.init_buff_len {
@@ -20,7 +20,7 @@ pub fn exec(code: &str, options: BFOptions) -> Result<String, JsError> {
         .into_iter()
         .collect();
 
-    let mut output = vec![];
+    let mut output: Vec<u8> = vec![];
     let mut i: usize = 0;
     let mut count: u32 = 0;
 
@@ -98,7 +98,7 @@ mod test {
             input: None,
             init_buff_len: None,
         };
-        let result = exec(str, options).unwrap();
+        let result = exec_inner(str, options).unwrap();
         assert_eq!(&result, "Hello World!");
     }
 }
