@@ -1,26 +1,17 @@
 import { asyncWorkerFactory } from './async_worker';
 import { type UnknownObj, BFRuntimeError } from './util';
 import { ResultAsync } from 'neverthrow';
-import type { BFExecOptions } from './wasm/wasm_part';
+import type { BFOptions } from './wasm/wasm_part';
+import Worker from './wasm_wrapper?worker';
 
-const w = new Worker(new URL('worker.ts', import.meta.url), { type: 'module' });
+const worker = asyncWorkerFactory<{ code: string; options: BFOptions }, string>(
+  new Worker()
+);
 
-const worker = asyncWorkerFactory<
-  { code: string; options: BFExecOptions },
-  string
->(w);
-
-export const exec = (code: string, options: BFExecOptions = {}) => {
+export const exec = (code: string, options: BFOptions = {}) => {
   worker.postMessage({ code, options });
 
-  const ans = worker.receive().then((a) => {
-    if (a == undefined) {
-      throw Error('!');
-    }
-    return a;
-  });
-
-  return ResultAsync.fromPromise(ans, (_e) => {
+  return ResultAsync.fromPromise(worker.receive(), (_e) => {
     if (_e == null) {
       return BFRuntimeError('UnidentifiedError');
     }
