@@ -19,6 +19,8 @@
   --color-d-main: var(--color-violet-dark);
   --color-text: #000;
   --color-d-text: #fff;
+  --color-textinv: #fff;
+  --color-d-textinv: #000;
   --color-border: var(--color-slate-400);
   --color-d-border: var(--color-slate-500);
   --color-border-2: var(--color-slate-500);
@@ -176,15 +178,19 @@
     @apply my-5 mx-auto w-full max-w-160 cborder-border-2;
   }
 
-  .astro-code {
-    @apply px-3 py-2 rounded my-(--s-heading);
-  }
-
   :is(strong, b) {
     @apply font-semibold;
   }
 
   :is(input:where([type='text']), textarea) {
-    @apply border cborder-border rounded;
+    @apply border cborder-border rounded font-mono px-1;
+  }
+
+  textarea {
+    @apply resize-y min-h-25;
+  }
+
+  button {
+    @apply cursor-pointer cbg-heading ctext-textinv px-2 rounded hover:opacity-60 transition-opacity;
   }
 }

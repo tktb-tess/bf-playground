@@ -34,15 +34,15 @@
   <p>Brainf*ck の簡易的な実行環境です。</p>
 
   <div class="flex flex-col gap-2">
-    <div class="flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-w-0">
-      <div class="flex flex-col">
-        <label for="code" class="text-center">コード</label>
+    <div class="__input-root">
+      <section class="__input-section">
+        <label for="code">コード</label>
         <textarea id="code" bind:value={code}></textarea>
-      </div>
-      <div class="flex flex-col">
-        <label for="input" class="text-center">入力</label>
+      </section>
+      <section class="__input-section">
+        <label for="input">入力</label>
         <textarea id="input" bind:value={input}></textarea>
-      </div>
+      </section>
     </div>
     <button type="button" class="self-center" onclick={handleClick}>
       実行
@@ -65,3 +65,20 @@
   </div>
 </main>
 <div class="h-10"></div>
+
+<style lang="postcss">
+  @reference './app.css';
+  @layer components {
+    .__input-root {
+      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-w-0;
+    }
+
+    .__input-section {
+      @apply flex flex-col;
+
+      > :where(label) {
+        @apply text-center;
+      }
+    }
+  }
+</style>
