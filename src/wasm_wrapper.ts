@@ -1,5 +1,7 @@
-import init, { exec_inner, type BFOptions } from './wasm/wasm_part';
-import { BFRuntimeError, fromError, type WorkerResult } from './util';
+import init, { exec_inner } from './wasm/wasm_part';
+import { BFRuntimeError, fromError } from './util';
+import type { BFOptions } from './wasm/wasm_part';
+import type { WorkerResult } from './util';
 
 globalThis.onmessage = async (
   e: MessageEvent<{ code: string; options: BFOptions }>

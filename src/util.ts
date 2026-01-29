@@ -1,10 +1,5 @@
-export type BFExecOptions = {
-  input?: string;
-  initBuffLength?: number;
-};
-
 export type UnknownObj = {
-  [K in string | number | symbol]?: unknown;
+  [key: string | symbol]: unknown;
 };
 
 type BFRuntimeError = {
@@ -44,19 +39,3 @@ export type WorkerResult<T, E> =
       success: false;
       error: E;
     };
-
-export const resolvers = <T>() => {
-  let resolve!: (value: T | PromiseLike<T>) => void;
-  let reject!: (reason?: unknown) => void;
-
-  const promise = new Promise<T>((res, rej) => {
-    resolve = res;
-    reject = rej;
-  });
-
-  return {
-    promise,
-    resolve,
-    reject,
-  };
-};
