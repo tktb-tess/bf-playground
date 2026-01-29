@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::{error, fmt};
+use std::error::Error;
+use std::fmt;
 use tsify::Tsify;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, Tsify)]
@@ -22,6 +23,4 @@ impl fmt::Display for BFRuntimeError {
     }
 }
 
-impl error::Error for BFRuntimeError {}
-
-
+impl Error for BFRuntimeError {}

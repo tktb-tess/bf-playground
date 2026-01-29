@@ -25,7 +25,7 @@ impl BFMemory {
         let len = self.stack.len();
         self.stack.get(self.index).ok_or_else(|| {
             BFRuntimeError::new(&format!(
-                "out of range\nindex: {}\nlen: {}",
+                "Out of range\nindex: {}\nlen: {}",
                 self.index, len
             ))
         })
@@ -35,7 +35,7 @@ impl BFMemory {
         let len = self.stack.len();
         self.stack.get_mut(self.index).ok_or_else(|| {
             BFRuntimeError::new(&format!(
-                "out of range\nindex: {}\nlen: {}",
+                "Out of range\nindex: {}\nlen: {}",
                 self.index, len
             ))
         })
@@ -51,7 +51,7 @@ impl BFMemory {
         }
 
         if new_len > Self::LIMIT {
-            Err(BFRuntimeError::new("exceeded limit of memory size"))?;
+            Err(BFRuntimeError::new("Exceeded limit of memory size"))?;
         }
 
         self.stack.resize(new_len, 0);

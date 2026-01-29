@@ -7,6 +7,12 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [svelte(), tailwindcss()],
   base: '/bf-playground/',
+  server: {
+    port: 8000,
+  },
+  preview: {
+    port: 8000,
+  },
   test: {
     testTimeout: 30000,
   },

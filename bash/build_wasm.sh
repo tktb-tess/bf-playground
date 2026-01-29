@@ -1,5 +1,5 @@
-# !/bin/bash
-echo "Delete previous WebAssembly files ..."
+#!/bin/bash
+echo "Removing previous WebAssembly files ..."
 rm -rf ./src/wasm
 
 cd ./rust

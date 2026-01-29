@@ -8,54 +8,55 @@ class Queue<T> {
     return this.#in.length + this.#out.length;
   }
 
-  #transfer = () => {
+  #transfer() {
     while (this.#in.length > 0) {
       this.#out.push(this.#in.pop()!);
     }
-  };
+  }
 
-  enqueue = (item: T) => {
+  enqueue(item: T) {
     this.#in.push(item);
     return this.length;
-  };
+  }
 
-  dequeue = () => {
+  dequeue() {
     if (this.#out.length === 0) {
       this.#transfer();
     }
     return this.#out.pop();
-  };
+  }
 
-  toArray = () => {
+  toArray() {
     this.#transfer();
     return this.#out.slice();
-  };
+  }
 }
 
-export const asyncWorkerFactory = <TPost, TRecv>(worker: Worker) => {
-  const queue: Queue<WorkerResult<TRecv, unknown>> = new Queue();
+export class AsyncWorker<TPost, TRecv> {
+  readonly #queue: Queue<WorkerResult<TRecv, unknown>> = new Queue();
+  readonly worker: Worker;
 
-  worker.onmessage = (e: MessageEvent<WorkerResult<TRecv, unknown>>) => {
-    queue.enqueue(e.data);
-  };
+  constructor(worker: Worker) {
+    this.worker = worker;
+    this.worker.onmessage = (e: MessageEvent<WorkerResult<TRecv, unknown>>) => {
+      this.#queue.enqueue(e.data);
+    };
 
-  worker.onerror = (e) => {
-    throw Error(e.message, { cause: e });
-  };
+    this.worker.onerror = (e) => {
+      throw Error(e.message, { cause: e });
+    };
+  }
 
-  const postMessage = (
-    message: TPost,
-    options?: StructuredSerializeOptions
-  ) => {
-    worker.postMessage(message, options);
-  };
+  postMessage(message: TPost, options?: StructuredSerializeOptions) {
+    this.worker.postMessage(message, options);
+  }
 
-  const receive = () => {
+  receive() {
     return new Promise<TRecv>((resolve, reject) => {
       const id = setInterval(() => {
-        if (queue.length > 0) {
+        if (this.#queue.length > 0) {
           clearInterval(id);
-          const res = queue.dequeue()!;
+          const res = this.#queue.dequeue()!;
 
           if (res.success) {
             resolve(res.value);
@@ -65,27 +66,20 @@ export const asyncWorkerFactory = <TPost, TRecv>(worker: Worker) => {
         }
       }, 10);
     });
-  };
+  }
 
-  async function* iter(max: number) {
+  async *iter(max: number) {
     for (let i = 0; i < max; i++) {
-      if (queue.length > 0) {
-        const res = queue.dequeue()!;
+      if (this.#queue.length > 0) {
+        const res = this.#queue.dequeue()!;
         if (res.success) {
           yield res.value;
         } else {
           throw res.error;
         }
       } else {
-        yield receive();
+        yield this.receive();
       }
     }
   }
-
-  return {
-    postMessage,
-    receive,
-    iter,
-    worker,
-  };
-};
+}

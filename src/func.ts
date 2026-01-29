@@ -1,10 +1,10 @@
-import { asyncWorkerFactory } from './async_worker';
+import { AsyncWorker } from './async_worker';
 import { type UnknownObj, BFRuntimeError } from './util';
 import { ResultAsync } from 'neverthrow';
 import type { BFOptions } from './wasm/wasm_part';
 import Worker from './wasm_wrapper?worker';
 
-const worker = asyncWorkerFactory<{ code: string; options: BFOptions }, string>(
+const worker = new AsyncWorker<{ code: string; options: BFOptions }, string>(
   new Worker()
 );
 
@@ -18,7 +18,7 @@ export const exec = (code: string, options: BFOptions = {}) => {
 
     const e = _e as UnknownObj;
 
-    if (e?.name === 'BFRuntimeError') {
+    if (e.name === 'BFRuntimeError') {
       return e as unknown as BFRuntimeError;
     } else {
       return BFRuntimeError(
