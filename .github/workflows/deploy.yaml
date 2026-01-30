@@ -48,9 +48,21 @@ jobs:
       - name: Install Dependencies
         run: pnpm i --frozen-lockfile
 
-      - name: Build WebAssembly
-        run: ./bash/build_wasm.sh
+      - name: Compile to wasm
+        run: |
+          cd ./rust
+          cargo build --release --lib
 
+      - name: Execute wasm-bindgen
+        run: |
+          wasm-bindgen --out-dir ../src/wasm --typescript --target web ./target/wasm32-unknown-unknown/release/wasm_part.wasm
+
+      - name: Optimize wasm
+        run: |
+          cd ../src/wasm
+          wasm-opt ./wasm_part_bg.wasm -o ./opted.wasm -O
+          mv ./opted.wasm ./wasm_part_bg.wasm
+      
       - name: Build Vite
         run: pnpm run build
 
