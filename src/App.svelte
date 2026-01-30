@@ -33,8 +33,8 @@
   <p><a href="/.">戻る</a></p>
   <p>Brainf*ck の簡易的な実行環境です。</p>
 
-  <div class="flex flex-col gap-2">
-    <div class="__input-root">
+  <div id="bf-playground">
+    <div class="__inputs">
       <section class="__input-section">
         <label for="code">コード</label>
         <textarea id="code" bind:value={code}></textarea>
@@ -69,7 +69,11 @@
 <style lang="postcss">
   @reference './app.css';
   @layer components {
-    .__input-root {
+    #bf-playground {
+      @apply flex flex-col gap-2;
+    }
+
+    .__inputs {
       @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-w-0;
     }
 
@@ -78,6 +82,10 @@
 
       > :where(label) {
         @apply text-center;
+      }
+
+      > :where(textarea#code) {
+        @apply break-all;
       }
     }
   }
