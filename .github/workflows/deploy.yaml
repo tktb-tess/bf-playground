@@ -55,11 +55,12 @@ jobs:
 
       - name: Execute wasm-bindgen
         run: |
+          cd ./rust
           wasm-bindgen --out-dir ../src/wasm --typescript --target web ./target/wasm32-unknown-unknown/release/wasm_part.wasm
 
       - name: Optimize wasm
         run: |
-          cd ../src/wasm
+          cd ./src/wasm
           wasm-opt ./wasm_part_bg.wasm -o ./opted.wasm -O
           mv ./opted.wasm ./wasm_part_bg.wasm
       
