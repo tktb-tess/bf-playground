@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { BFRuntimeError } from './util';
+  import type { WorkerMsg } from './util';
   import { exec } from './func';
-  import { ResultAsync, okAsync } from 'neverthrow';
 
   const title = 'BF Playground';
 
@@ -15,70 +14,122 @@
     resultA = exec(code, { input });
   };
 
-  let resultA: ResultAsync<string, BFRuntimeError> = $state(okAsync(''));
+  let resultA: Promise<WorkerMsg> = $state(
+    Promise.resolve({ success: true, value: '' }),
+  );
 
   $effect(() => {
-    resultA.orTee((e) => {
-      Object.entries(e).forEach(([k, v]) => {
-        console.log(k, v);
-      });
-    });
+    resultA
+      .then((e) => {
+        if (!e.success) {
+          console.error(e.error.message);
+        }
+      })
+      .catch((e) => console.error(e));
   });
 </script>
 
-<header>
-  <h1 id="title">{title}</h1>
-</header>
-<main>
-  <p><a href="/.">戻る</a></p>
-  <p>Brainf*ck の簡易的な実行環境です。</p>
+<div class="_cont_">
+  <header>
+    <h1 id="title">{title}</h1>
+  </header>
+  <main>
+    <p class="back-btn"><a href="/.">戻る</a></p>
+    <p>Brainf*ck の簡易的な実行環境です。</p>
 
-  <div class="bf-playground">
-    <div class="__inputs">
-      <section class="__input-section">
-        <label for="code">コード</label>
-        <textarea id="code" bind:value={code}></textarea>
-      </section>
-      <section class="__input-section">
-        <label for="input">入力</label>
-        <textarea id="input" bind:value={input}></textarea>
-      </section>
+    <div class="bf-playground">
+      <div class="__inputs">
+        <section class="__input-section">
+          <label for="code">コード</label>
+          <textarea id="code" bind:value={code}></textarea>
+        </section>
+        <section class="__input-section">
+          <label for="input">入力</label>
+          <textarea id="input" bind:value={input}></textarea>
+        </section>
+      </div>
+      <button type="button" class="self-center" onclick={handleClick}>
+        実行
+      </button>
+      <div class="__input-section">
+        <label for="result" class="text-center">実行結果</label>
+        {#await resultA}
+          <textarea id="result" value="Executing..." readonly></textarea>
+        {:then result}
+          <textarea
+            id="result"
+            value={result.success
+              ? result.value
+              : `${result.error.name}: ${result.error.message}`}
+            readonly
+            class={!result.success ? 'text-caution' : ''}
+          ></textarea>
+        {:catch}
+          <textarea id="result" value="Unexpected error" readonly></textarea>
+        {/await}
+      </div>
     </div>
-    <button type="button" class="self-center" onclick={handleClick}>
-      実行
-    </button>
-    <label for="result" class="text-center">実行結果</label>
-    {#await resultA}
-      <textarea id="result" readonly>Executing...</textarea>
-    {:then result}
-      <textarea
-        id="result"
-        value={result.isOk()
-          ? result.value
-          : `${result.error.name}: ${result.error.message}`}
-        readonly
-        class={result.isErr() ? 'text-caution' : ''}
-      ></textarea>
-    {:catch}
-      <p>Unexpected Error</p>
-    {/await}
-  </div>
-</main>
-<div class="h-10"></div>
+  </main>
+  <footer></footer>
+</div>
 
 <style lang="postcss">
   @reference './app.css';
   @layer components {
+    ._cont_ {
+      @apply max-xl:flow-root xl:grid;
+      --side: minmax(min(16rem, 50%), 1fr);
+      --main: minmax(0, 72rem);
+
+      grid-template-areas:
+        'h h h'
+        'l m r'
+        'f f f';
+
+      grid-template-columns:
+        var(--side)
+        var(--main)
+        var(--side);
+
+      grid-template-rows: auto 1fr auto;
+    }
+    header,
+    main,
+    footer {
+      @apply flow-root;
+    }
+
+    main {
+      @apply px-4 pbe-36 bg-main min-block-lvh;
+      grid-area: m;
+    }
+
+    #title {
+      @apply max-md:text-4xl md:text-5xl font-extralight text-balance my-10 text-center;
+    }
+
+    header {
+      grid-area: h;
+    }
+
+    footer {
+      grid-area: f;
+    }
+
+    .back-btn {
+      @apply mbs-paragraph;
+    }
+
     .bf-playground {
-      @apply flex flex-col gap-2;
+      @apply flex flex-col gap-4 mbs-paragraph;
     }
 
     .__inputs {
-      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-inline-0;
+      @apply grid gap-2 cols-auto-fit-90 *:min-inline-0;
     }
 
     .__input-section {
-      @apply flex flex-col;
+      @apply flex flex-col gap-1;
 
       > :where(label) {
         @apply text-center;
