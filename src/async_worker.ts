@@ -53,9 +53,8 @@ export class AsyncWorker<TPost, TRecv> {
 
   receive() {
     return new Promise<TRecv>((resolve, reject) => {
-      const id = setInterval(() => {
+      const f = () => {
         if (this.#queue.length > 0) {
-          clearInterval(id);
           const res = this.#queue.dequeue()!;
 
           if (res.success) {
@@ -63,8 +62,12 @@ export class AsyncWorker<TPost, TRecv> {
           } else {
             reject(res.error);
           }
+        } else {
+          setTimeout(f, 10);
         }
-      }, 10);
+      };
+
+      f();
     });
   }
 

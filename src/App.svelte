@@ -33,7 +33,7 @@
   <p><a href="/.">戻る</a></p>
   <p>Brainf*ck の簡易的な実行環境です。</p>
 
-  <div id="bf-playground">
+  <div class="bf-playground">
     <div class="__inputs">
       <section class="__input-section">
         <label for="code">コード</label>
@@ -57,7 +57,7 @@
           ? result.value
           : `${result.error.name}: ${result.error.message}`}
         readonly
-        class={result.isErr() ? 'text-red-500' : ''}
+        class={result.isErr() ? 'text-caution' : ''}
       ></textarea>
     {:catch}
       <p>Unexpected Error</p>
@@ -69,12 +69,12 @@
 <style lang="postcss">
   @reference './app.css';
   @layer components {
-    #bf-playground {
+    .bf-playground {
       @apply flex flex-col gap-2;
     }
 
     .__inputs {
-      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-w-0;
+      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-inline-0;
     }
 
     .__input-section {
