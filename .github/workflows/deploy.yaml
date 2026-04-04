@@ -20,8 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -33,14 +32,12 @@ jobs:
 
       - name: Install wasm-bindgen-cli & wasm-opt
         run: |
-          cargo install wasm-bindgen-cli --locked --version 0.2.108
+          cargo install wasm-bindgen-cli --locked --version 0.2.117
           cargo install wasm-opt --locked --version 0.116.1
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
@@ -63,15 +60,13 @@ jobs:
           cd ./src/wasm
           wasm-opt ./wasm_part_bg.wasm -o ./opted.wasm -O
           mv ./opted.wasm ./wasm_part_bg.wasm
-      
+
       - name: Build Vite
         run: pnpm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v5
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 

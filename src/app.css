@@ -1,38 +1,41 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'noto-sans-jp';
+  src: local('Noto Sans JP'), local('Noto Sans CJK JP');
+  font-display: swap;
+}
+
 @theme {
   --font-sans:
-    'Inter-Variable', 'Arial', 'Helvetica Neue', 'Noto Sans JP',
-    'Noto Sans CJK JP', 'Source Han Sans', 'BIZ UDPGothic',
-    'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
-    'Noto Sans Canadian Aboriginal', sans-serif, system-ui;
+    'Inter-Variable', 'Arial', 'Helvetica Neue', 'noto-sans-jp',
+    'BIZ UDPGothic', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif,
+    'Segoe UI';
   --font-serif:
     'Charis-Web', 'Times New Roman', 'Noto Serif JP', 'Noto Serif CJK JP',
-    'Source Han Serif', 'BIZ UDPMincho', 'Hiragino Mincho ProN',
-    'Hiragino Serif', serif, system-ui;
+    'BIZ UDPMincho', 'Hiragino Mincho ProN', 'Hiragino Serif', serif, 'Segoe UI';
   --font-ipa: var(--font-serif);
+  --default-font-feature-settings:
+    'calt', 'cv01', 'cv05', 'cv07', 'cv08', 'cv10', 'ss03';
 
   --color-violet-dark: oklch(from var(--color-violet-950) 20% 0.06 h);
-  --color-side: var(--color-violet-50);
-  --color-d-side: var(--color-violet-950);
-  --color-main: #fff;
-  --color-d-main: var(--color-violet-dark);
-  --color-text: #000;
-  --color-d-text: #fff;
-  --color-textinv: #fff;
-  --color-d-textinv: #000;
-  --color-border: var(--color-slate-400);
-  --color-d-border: var(--color-slate-500);
-  --color-border-2: var(--color-slate-500);
-  --color-d-border-2: var(--color-slate-400);
-  --color-link: var(--color-blue-700);
-  --color-d-link: var(--color-blue-400);
-  --color-heading: var(--color-violet-950);
-  --color-d-heading: var(--color-violet-100);
+
+  --color-side: light-dark(var(--color-violet-100), var(--color-violet-950));
+  --color-main: canvas;
+  --color-text: canvasText;
+  --color-textinv: canvas;
+  --color-accent: light-dark(var(--color-violet-950), var(--color-violet-100));
+  --color-border: light-dark(hsl(0 0 0 / 25%), hsl(0 0 100 / 25%));
+  --color-border-2: light-dark(hsl(0 0 0 / 40%), hsl(0 0 100 / 40%));
+  --color-link: light-dark(var(--color-blue-700), #10ff10);
+  --color-link-disabled: light-dark(hsl(0 0 0 / 60%), hsl(0 0 100 / 40%));
+  --color-caution: light-dark(var(--color-red-600), var(--color-yellow-300));
 
   --default-transition-duration: 110ms;
   --s-paragraph: 0.75rem;
   --s-heading: 2.5rem;
+  --spacing-paragraph: 0.75rem;
+  --spacing-heading: 2.5rem;
 }
 
 @utility cbg-* {
@@ -68,22 +71,35 @@
 }
 
 @layer base {
-  * {
-    @apply wrap-anywhere hyphens-auto;
+  :root {
+    @apply max-sm:text-sm wrap-anywhere hyphens-auto scheme-light-dark;
+    -webkit-tap-highlight-color: revert;
+    font-optical-sizing: auto;
     line-break: strict;
+    scrollbar-gutter: stable;
+    text-spacing-trim: trim-start;
+    text-autospace: normal;
   }
 
-  html {
-    -webkit-tap-highlight-color: revert;
-    @apply max-sm:text-sm;
+  [lang] {
+    word-break: normal;
+  }
+
+  @supports (word-break: auto-phrase) {
+    @media (width >= 40rem) {
+      [lang^='ja'] {
+        word-break: auto-phrase;
+        text-align: justify;
+      }
+    }
   }
 
   body {
-    @apply flow-root cbg-side ctext-text;
+    @apply flow-root bg-side text-text;
   }
 
   main {
-    @apply flow-root w-full max-w-7xl px-4 mx-auto cbg-main min-h-lvh;
+    @apply flow-root inline-full max-inline-7xl px-4 mx-auto bg-main min-block-lvh;
 
     > :where(:first-child) {
       @apply mt-3;
@@ -94,7 +110,7 @@
     }
   }
 
-  h1#title {
+  #title {
     @apply text-4xl font-extralight text-balance my-10 text-center;
   }
 
@@ -102,8 +118,16 @@
     @apply flow-root;
   }
 
-  :is(h2, h3, h4) {
-    @apply font-normal ctext-heading mt-(--s-heading);
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-normal text-accent;
+  }
+
+  * + :is(h2, h3, h4, h5, h6) {
+    @apply mbs-heading;
   }
 
   h2 {
@@ -118,20 +142,21 @@
     @apply text-xl;
   }
 
-  :is(h5, h6) {
+  h5,
+  h6 {
     @apply font-semibold text-base;
   }
 
-  :is(h5, h6, p, ul, ol, pre) {
-    @apply mt-(--s-paragraph);
+  :not(li) > * + :where(p, ul, ol, pre) {
+    @apply mbs-paragraph;
   }
 
-  :is(ul, ol) {
-    @apply ps-7;
+  :not(li) > :where(ul, ol) {
+    @apply ms-7;
   }
 
-  li > :is(ul, ol) {
-    @apply ps-4;
+  li > :where(ul, ol) {
+    @apply ms-4;
   }
 
   ul {
@@ -142,55 +167,51 @@
     @apply list-decimal;
   }
 
-  li > :where(p, ul, ol) {
-    @apply mt-0;
-  }
-
   a {
-    @apply ctext-link hover:underline;
+    @apply text-link hover:underline;
   }
 
   table {
-    @apply w-max max-w-full me-auto;
+    @apply inline-max max-inline-full me-auto;
 
     :where(& > thead > tr:last-child) {
-      @apply border-b cborder-border-2;
+      @apply border-b border-border-2;
     }
 
     :where(& > :is(thead, tbody, tfoot) > tr:not(:last-child)) {
-      @apply border-b cborder-border;
+      @apply border-b border-border;
     }
 
     :where(td, th) {
       @apply text-base py-1.25 px-2.5 text-center;
     }
-
-    :where(th) {
-      @apply font-semibold;
-    }
   }
 
   .table-container:has(> table) {
-    @apply overflow-auto max-w-full my-(--s-heading);
+    @apply overflow-auto max-inline-full my-(--s-heading);
   }
 
   hr {
-    @apply my-5 mx-auto w-full max-w-160 cborder-border-2;
+    @apply my-5 mx-auto inline-full max-inline-160 border-border-2;
   }
 
-  :is(strong, b) {
+  strong,
+  b,
+  th {
     @apply font-semibold;
   }
 
-  :is(input:where([type='text']), textarea) {
-    @apply border cborder-border rounded font-mono px-1;
+  input:where([type='text']),
+  textarea {
+    @apply border border-border rounded font-mono px-1;
   }
 
   textarea {
-    @apply resize-y min-h-25;
+    @apply resize-y min-block-25;
   }
 
   button {
-    @apply cursor-pointer cbg-heading ctext-textinv px-2 rounded hover:opacity-60 transition-opacity;
+    @apply cursor-pointer bg-accent hover-focus:opacity-70 transition-opacity
+      rounded text-textinv px-4 py-2 no-underline leading-none;
   }
 }

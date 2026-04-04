@@ -30,12 +30,14 @@ export const fromError = (error: Error): BFRuntimeError => {
 
 export { BFRuntimeError };
 
-export type WorkerResult<T, E> =
-  | {
-      success: true;
-      value: T;
-    }
-  | {
-      success: false;
-      error: E;
-    };
+interface WOk<T> {
+  success: true;
+  value: T;
+}
+
+interface WErr<E = unknown> {
+  success: false;
+  error: E;
+}
+
+export type WorkerResult<T, E> = WOk<T> | WErr<E>;
