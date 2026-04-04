@@ -74,7 +74,7 @@
     }
 
     .__inputs {
-      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-w-0;
+      @apply flex max-lg:flex-col gap-2 *:flex-[1_1_0] *:min-inline-0;
     }
 
     .__input-section {

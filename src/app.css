@@ -32,41 +32,20 @@
   --color-caution: light-dark(var(--color-red-600), var(--color-yellow-300));
 
   --default-transition-duration: 110ms;
-  --s-paragraph: 0.75rem;
-  --s-heading: 2.5rem;
+  
   --spacing-paragraph: 0.75rem;
   --spacing-heading: 2.5rem;
 }
 
-@utility cbg-* {
-  background-color: --value(--color-*);
-
-  @media (prefers-color-scheme: dark) {
-    background-color: --value(--color-d- *);
+@custom-variant hover-focus {
+  @media (any-hover: hover) {
+    &:hover {
+      @slot;
+    }
   }
-}
 
-@utility gbg-* {
-  background-image: --value(--grad-*);
-
-  @media (prefers-color-scheme: dark) {
-    background-image: --value(--grad-d- *);
-  }
-}
-
-@utility cborder-* {
-  border-color: --value(--color-*);
-
-  @media (prefers-color-scheme: dark) {
-    border-color: --value(--color-d- *);
-  }
-}
-
-@utility ctext-* {
-  color: --value(--color-*);
-
-  @media (prefers-color-scheme: dark) {
-    color: --value(--color-d- *);
+  &:focus-visible {
+    @slot;
   }
 }
 
@@ -188,7 +167,7 @@
   }
 
   .table-container:has(> table) {
-    @apply overflow-auto max-inline-full my-(--s-heading);
+    @apply overflow-auto max-inline-full my-heading;
   }
 
   hr {
