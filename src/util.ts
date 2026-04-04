@@ -28,6 +28,13 @@ export const fromError = (error: Error): BFRuntimeError => {
   };
 };
 
+export const parseError = (_e: unknown) => {
+  if (_e instanceof Error) {
+    return fromError(_e);
+  }
+  return BFRuntimeError('unidentified error', `${_e}`);
+};
+
 export { BFRuntimeError };
 
 interface WOk<T> {
@@ -41,3 +48,5 @@ interface WErr<E = unknown> {
 }
 
 export type WorkerResult<T, E> = WOk<T> | WErr<E>;
+
+export type WorkerMsg = WorkerResult<string, BFRuntimeError>;

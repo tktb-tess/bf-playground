@@ -1,30 +1,39 @@
-import { AsyncWorker } from './async_worker';
-import { ResultAsync } from 'neverthrow';
-import Worker from './wasm_wrapper?worker';
-import { type UnknownObj, BFRuntimeError } from './util';
+import { parseError } from './util';
 import type { BFOptions } from './wasm/wasm_part';
+import type { WorkerMsg } from './util';
 
-const worker = new AsyncWorker<{ code: string; options: BFOptions }, string>(
-  new Worker(),
-);
+let worker: Worker | undefined;
+
+const getWorker = () => {
+  if (!worker) {
+    worker = new Worker(new URL('./wasm_wrapper.ts', import.meta.url), {
+      type: 'module',
+    });
+  }
+  return worker;
+};
 
 export const exec = (code: string, options: BFOptions = {}) => {
-  worker.postMessage({ code, options });
+  return new Promise<WorkerMsg>(async (resolve) => {
+    const worker = getWorker();
+    const messageHandle = (e: MessageEvent<WorkerMsg>) => {
+      const res = e.data;
+      worker.onerror = null;
+      worker.onmessage = null;
+      resolve(res);
+    };
 
-  return ResultAsync.fromPromise(worker.receive(), (_e) => {
-    if (_e == null) {
-      return BFRuntimeError('UnidentifiedError');
-    }
+    const errorHandle = (e: ErrorEvent) => {
+      worker.onerror = null;
+      worker.onmessage = null;
 
-    const e = _e as UnknownObj;
-
-    if (e.name === 'BFRuntimeError') {
-      return e as unknown as BFRuntimeError;
-    } else {
-      return BFRuntimeError(
-        e instanceof Error ? e.message : 'UnidentifiedError',
-        e instanceof Error ? e.cause : e,
-      );
-    }
+      resolve({
+        success: false,
+        error: parseError(e.error),
+      });
+    };
+    worker.onmessage = messageHandle;
+    worker.onerror = errorHandle;
+    worker.postMessage({ code, options });
   });
 };

@@ -32,7 +32,7 @@
   --color-caution: light-dark(var(--color-red-600), var(--color-yellow-300));
 
   --default-transition-duration: 110ms;
-  
+
   --spacing-paragraph: 0.75rem;
   --spacing-heading: 2.5rem;
 }
@@ -47,6 +47,27 @@
   &:focus-visible {
     @slot;
   }
+}
+
+@utility cols-auto-fill-* {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(calc(var(--spacing) * --value(integer)), 100%), 1fr)
+  );
+
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value([*]), 100%), 1fr)
+  );
+}
+
+@utility cols-auto-fit-* {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(calc(var(--spacing) * --value(integer)), 100%), 1fr)
+  );
+
+  grid-template-columns: repeat(auto-fit, minmax(min(--value([*]), 100%), 1fr));
 }
 
 @layer base {
@@ -75,26 +96,6 @@
 
   body {
     @apply flow-root bg-side text-text;
-  }
-
-  main {
-    @apply flow-root inline-full max-inline-7xl px-4 mx-auto bg-main min-block-lvh;
-
-    > :where(:first-child) {
-      @apply mt-3;
-    }
-
-    > :where(:last-child) {
-      @apply mb-3;
-    }
-  }
-
-  #title {
-    @apply text-4xl font-extralight text-balance my-10 text-center;
-  }
-
-  header {
-    @apply flow-root;
   }
 
   h2,
@@ -182,7 +183,7 @@
 
   input:where([type='text']),
   textarea {
-    @apply border border-border rounded font-mono px-1;
+    @apply border border-border rounded font-mono px-1 block-36;
   }
 
   textarea {

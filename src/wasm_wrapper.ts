@@ -1,13 +1,12 @@
 import init, { exec_inner } from './wasm/wasm_part';
-import { BFRuntimeError, fromError } from './util';
+import { parseError } from './util';
 import type { BFOptions } from './wasm/wasm_part';
-import type { WorkerResult } from './util';
+import type { WorkerMsg } from './util';
 
 globalThis.onmessage = async (
-  e: MessageEvent<{ code: string; options: BFOptions }>
+  e: MessageEvent<{ code: string; options: BFOptions }>,
 ) => {
   const { code, options } = e.data;
-
   try {
     await init();
     const value = exec_inner(code, options);
@@ -15,22 +14,16 @@ globalThis.onmessage = async (
     const ans = {
       success: true,
       value,
-    } as const satisfies WorkerResult<string, BFRuntimeError>;
+    } as const satisfies WorkerMsg;
 
     postMessage(ans);
   } catch (e) {
-    let error: BFRuntimeError;
-
-    if (e instanceof Error) {
-      error = fromError(e);
-    } else {
-      error = BFRuntimeError('Unidentified error');
-    }
+    const error = parseError(e);
 
     const ans = {
       success: false,
       error,
-    } as const satisfies WorkerResult<string, BFRuntimeError>;
+    } as const satisfies WorkerMsg;
 
     postMessage(ans);
   }
