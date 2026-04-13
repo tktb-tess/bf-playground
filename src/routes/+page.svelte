@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { WorkerMsg } from './util';
-  import { exec } from './func';
+  import '../app.css';
+  import type { WorkerMsg } from '$lib/util';
+  import { exec } from '$lib/func';
 
   const title = 'BF Playground';
 
@@ -34,7 +35,7 @@
     <h1 id="title">{title}</h1>
   </header>
   <main>
-    <p class="back-btn"><a href="/.">戻る</a></p>
+    <p class="back-btn"><a href="https://tktb-tess.github.io">戻る</a></p>
     <p>Brainf*ck の簡易的な実行環境です。</p>
 
     <div class="bf-playground">
@@ -54,7 +55,7 @@
       <div class="__input-section">
         <label for="result" class="text-center">実行結果</label>
         {#await resultA}
-          <textarea id="result" value="Executing..." readonly></textarea>
+          <textarea id="result" readonly>Executing...</textarea>
         {:then result}
           <textarea
             id="result"
@@ -65,7 +66,7 @@
             class={!result.success ? 'text-caution' : ''}
           ></textarea>
         {:catch}
-          <textarea id="result" value="Unexpected error" readonly></textarea>
+          <textarea id="result" readonly>Unexpected error</textarea>
         {/await}
       </div>
     </div>
@@ -74,7 +75,7 @@
 </div>
 
 <style lang="postcss">
-  @reference './app.css';
+  @reference '../app.css';
   @layer components {
     ._cont_ {
       @apply max-xl:flow-root xl:grid;

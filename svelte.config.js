@@ -1,7 +1,18 @@
 // @ts-check
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import adapter from '@sveltejs/adapter-static';
 
-/** @type {import("@sveltejs/vite-plugin-svelte").SvelteConfig} */
+/** @type {import("@sveltejs/kit").Config} */
 export default {
   preprocess: vitePreprocess(),
+  kit: {
+    adapter: adapter({
+      pages: 'dist',
+      fallback: undefined,
+      strict: true,
+    }),
+    paths: {
+      base: '/bf-playground',
+    },
+  },
 };
