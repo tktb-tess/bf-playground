@@ -7,6 +7,7 @@
     "dev": "vite",
     "build:wasm": "./bash/build_wasm.sh",
     "build": "vite build",
+    "build:full": "./bash/build_wasm.sh && vite build",
     "preview": "vite preview",
     "build-preview": "vite build && vite preview",
     "prepare": "svelte-kit sync || echo ''",

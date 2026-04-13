@@ -46,7 +46,7 @@ jobs:
       - name: Compile to wasm
         run: |
           cd ./rust
-          cargo build --release --lib
+          cargo build --release --lib -v
 
       - name: Execute wasm-bindgen
         run: |
