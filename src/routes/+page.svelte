@@ -55,7 +55,7 @@
       <div class="__input-section">
         <label for="result" class="text-center">実行結果</label>
         {#await resultA}
-          <textarea id="result" value={`Executing...`} readonly></textarea>
+          <textarea id="result" readonly>Executing...</textarea>
         {:then result}
           <textarea
             id="result"
@@ -66,7 +66,7 @@
             class={!result.success ? 'text-caution' : ''}
           ></textarea>
         {:catch}
-          <textarea id="result" value={`Unexpected error`} readonly></textarea>
+          <textarea id="result" readonly>Unexpected error</textarea>
         {/await}
       </div>
     </div>
