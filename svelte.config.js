@@ -12,7 +12,7 @@ export default {
       strict: true,
     }),
     paths: {
-      base: '/md-to-html',
+      base: '/bf-playground',
     },
   },
 };
