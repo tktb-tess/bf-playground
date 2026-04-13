@@ -1,39 +1,22 @@
-import { parseError } from './util';
+import { getWorker } from './get_worker';
+import { BFRuntimeError, parseError, type Result } from './util';
 import type { BFOptions } from './wasm/wasm_part';
-import type { WorkerMsg } from './util';
 
-let worker: Worker | undefined;
-
-const getWorker = () => {
-  if (!worker) {
-    worker = new Worker(new URL('./wasm_wrapper.ts', import.meta.url), {
-      type: 'module',
-    });
+export const exec = async (
+  code: string,
+  options: BFOptions = {},
+): Promise<Result<string, BFRuntimeError>> => {
+  const worker = getWorker();
+  try {
+    const value = await worker.postMessage({ code, options });
+    return {
+      success: true,
+      value,
+    };
+  } catch (e) {
+    return {
+      success: false,
+      error: parseError(e),
+    };
   }
-  return worker;
-};
-
-export const exec = (code: string, options: BFOptions = {}) => {
-  return new Promise<WorkerMsg>(async (resolve) => {
-    const worker = getWorker();
-    const messageHandle = (e: MessageEvent<WorkerMsg>) => {
-      const res = e.data;
-      worker.onerror = null;
-      worker.onmessage = null;
-      resolve(res);
-    };
-
-    const errorHandle = (e: ErrorEvent) => {
-      worker.onerror = null;
-      worker.onmessage = null;
-
-      resolve({
-        success: false,
-        error: parseError(e.error),
-      });
-    };
-    worker.onmessage = messageHandle;
-    worker.onerror = errorHandle;
-    worker.postMessage({ code, options });
-  });
 };

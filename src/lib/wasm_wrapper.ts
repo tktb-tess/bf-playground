@@ -1,30 +1,25 @@
 import init, { exec_inner } from './wasm/wasm_part';
-import { parseError } from './util';
-import type { BFOptions } from './wasm/wasm_part';
-import type { WorkerMsg } from './util';
+import {
+  postSuccess,
+  postFailed,
+  type WorkerMessage,
+} from '@tktb-tess/util-fns';
+import type { BFMessage } from './worker_types';
 
-globalThis.onmessage = async (
-  e: MessageEvent<{ code: string; options: BFOptions }>,
-) => {
-  const { code, options } = e.data;
+let initialized = false;
+
+globalThis.onmessage = async (e: MessageEvent<WorkerMessage<BFMessage>>) => {
+  const { id, value } = e.data;
+  const { code, options } = value;
   try {
-    await init();
+    if (!initialized) {
+      await init();
+      initialized = true;
+    }
     const value = exec_inner(code, options);
 
-    const ans = {
-      success: true,
-      value,
-    } as const satisfies WorkerMsg;
-
-    postMessage(ans);
+    postSuccess(value, id);
   } catch (e) {
-    const error = parseError(e);
-
-    const ans = {
-      success: false,
-      error,
-    } as const satisfies WorkerMsg;
-
-    postMessage(ans);
+    postFailed(e, id);
   }
 };

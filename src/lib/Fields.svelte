@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WorkerMsg } from '$lib/util';
+  import type { BFRuntimeError, Result } from '$lib/util';
   import { exec } from '$lib/func';
 
   let code = $state(
@@ -12,7 +12,7 @@
     resultA = exec(code, { input });
   };
 
-  let resultA: Promise<WorkerMsg> = $state(
+  let resultA: Promise<Result<string, BFRuntimeError>> = $state(
     Promise.resolve({ success: true, value: '' }),
   );
 

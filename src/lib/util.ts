@@ -13,7 +13,6 @@ const BFRuntimeError = (message: string, cause?: unknown): BFRuntimeError => {
   return {
     name: 'BFRuntimeError',
     message,
-    stack: new Error().stack,
     cause,
   };
 };
@@ -37,16 +36,14 @@ export const parseError = (_e: unknown) => {
 
 export { BFRuntimeError };
 
-interface WOk<T> {
+interface Ok<T> {
   success: true;
   value: T;
 }
 
-interface WErr<E = unknown> {
+interface Err<E = unknown> {
   success: false;
   error: E;
 }
 
-export type WorkerResult<T, E> = WOk<T> | WErr<E>;
-
-export type WorkerMsg = WorkerResult<string, BFRuntimeError>;
+export type Result<T, E> = Ok<T> | Err<E>;
