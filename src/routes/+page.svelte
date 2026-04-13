@@ -79,7 +79,7 @@
   @layer components {
     ._cont_ {
       @apply max-xl:flow-root xl:grid;
-      --side: minmax(min(16rem, 50%), 1fr);
+      --side: minmax(min(14rem, 50%), 1fr);
       --main: minmax(0, 72rem);
 
       grid-template-areas:
