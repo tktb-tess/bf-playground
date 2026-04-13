@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "build:wasm": "./bash/build_wasm.sh",
     "build": "vite build",
     "preview": "vite preview",
     "build-preview": "vite build && vite preview",
