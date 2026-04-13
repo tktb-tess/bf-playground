@@ -1,0 +1,63 @@
+name: Build only
+
+on:
+  push:
+    branches:
+      - develop
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            ./rust -> ./rust/target
+
+      - name: Install WebAssembly target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Install wasm-bindgen-cli & wasm-opt
+        run: |
+          cargo install wasm-bindgen-cli --locked
+          cargo install wasm-opt --locked
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Compile to wasm
+        run: |
+          cd ./rust
+          cargo build --release --lib
+
+      - name: Execute wasm-bindgen
+        run: |
+          cd ./rust
+          wasm-bindgen --out-dir ../src/lib/wasm --typescript --target web ./target/wasm32-unknown-unknown/release/wasm_part.wasm
+
+      - name: Optimize wasm
+        run: |
+          cd ./src/lib/wasm
+          wasm-opt ./wasm_part_bg.wasm -o ./opted.wasm -O
+          mv ./opted.wasm ./wasm_part_bg.wasm
+
+      - name: Build SvelteKit
+        run: pnpm run build
