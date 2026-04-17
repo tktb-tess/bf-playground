@@ -3,7 +3,7 @@ import {
   postSuccess,
   postFailed,
   type WorkerMessage,
-} from '@tktb-tess/util-fns';
+} from '@tktb-tess/util-fns/async_worker';
 import type { BFMessage } from './worker_types';
 
 let initialized = false;

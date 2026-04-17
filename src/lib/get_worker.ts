@@ -1,4 +1,4 @@
-import { AsyncWorker } from '@tktb-tess/util-fns';
+import { AsyncWorker } from '@tktb-tess/util-fns/async_worker';
 import Worker from './wasm_wrapper?worker';
 import type { BFMessage } from './worker_types';
 

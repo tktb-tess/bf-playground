@@ -20,7 +20,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
-    "@tktb-tess/util-fns": "^0.12.5",
+    "@tktb-tess/util-fns": "^0.13.0",
     "@tsconfig/svelte": "^5.0.8",
     "@types/node": "^24.12.2",
     "neverthrow": "^8.2.0",
