@@ -23,35 +23,33 @@ impl BFMemory {
 
     pub fn get_value(&self) -> BFResult<&u8> {
         let len = self.stack.len();
-        self.stack.get(self.index).ok_or_else(|| {
-            BFRuntimeError::new(&format!(
-                "Out of range\nindex: {}\nlen: {}",
-                self.index, len
-            ))
-        })
+        self.stack
+            .get(self.index)
+            .ok_or_else(|| BFRuntimeError::OutOfRange {
+                index: self.index,
+                len,
+            })
     }
 
     pub fn get_value_mut(&mut self) -> BFResult<&mut u8> {
         let len = self.stack.len();
-        self.stack.get_mut(self.index).ok_or_else(|| {
-            BFRuntimeError::new(&format!(
-                "Out of range\nindex: {}\nlen: {}",
-                self.index, len
-            ))
-        })
+        self.stack
+            .get_mut(self.index)
+            .ok_or_else(|| BFRuntimeError::OutOfRange {
+                index: self.index,
+                len,
+            })
     }
 
     fn realloc(&mut self, new_len: usize) -> BFResult<()> {
         let len = self.stack.len();
 
         if len > new_len {
-            Err(BFRuntimeError::new(
-                "New length is shorter than current length",
-            ))?;
+            Err(BFRuntimeError::AllocShorterMemory)?;
         }
 
         if new_len > Self::LIMIT {
-            Err(BFRuntimeError::new("Exceeded limit of memory size"))?;
+            Err(BFRuntimeError::ExceededLimitMemSize(Self::LIMIT))?;
         }
 
         self.stack.resize(new_len, 0);

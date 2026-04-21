@@ -47,14 +47,13 @@ jobs:
           cd ./rust
           cargo build --release --lib
 
-      - name: Execute wasm-bindgen
+      - name: Execute wasm-bindgen & Optimize wasm
         run: |
           cd ./rust
+          echo "execute wasm-bindgen..."
           wasm-bindgen --out-dir ../src/lib/wasm --typescript --target web ./target/wasm32-unknown-unknown/release/wasm_part.wasm
-
-      - name: Optimize wasm
-        run: |
-          cd ./src/lib/wasm
+          cd ../src/lib/wasm
+          echo "optimize wasm using wasm-opt..."
           wasm-opt ./wasm_part_bg.wasm -o ./opted.wasm -O
           mv ./opted.wasm ./wasm_part_bg.wasm
 

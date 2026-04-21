@@ -26,14 +26,11 @@ pub fn exec_inner(code: &str, options: BFOptions) -> Result<String, JsError> {
 
     while i < code.len() {
         if count > CYCLE_LIMIT {
-            Err(BFRuntimeError::new("Exceeded limit of loop"))?;
+            Err(BFRuntimeError::ExceededLimitLoopSize(CYCLE_LIMIT as usize))?;
         }
 
         let c = code.get(i).ok_or_else(|| {
-            BFRuntimeError::new(&format!(
-                "Unexpected error: index was out of range {} {:?}",
-                i, code
-            ))
+            BFRuntimeError::OutOfRange { index: i, len: code.len() }
         })?;
 
         match c {
@@ -56,14 +53,14 @@ pub fn exec_inner(code: &str, options: BFOptions) -> Result<String, JsError> {
             Write => {
                 let write = input
                     .pop_front()
-                    .ok_or_else(|| BFRuntimeError::new("Ran out of input"))?;
+                    .ok_or_else(|| BFRuntimeError::RanOutOfInput)?;
                 *mem.get_value_mut()? = write;
             }
             LoopStart => {
                 let mut iter = code.maps.iter();
                 if *mem.get_value()? == 0 {
                     let e = iter.find(|[s, _]| i == *s).ok_or_else(|| {
-                        BFRuntimeError::new("Invalid source code: loop not found")
+                        BFRuntimeError::FailedToParseCode("loop not found".into())
                     })?[1];
                     i = e;
                 }
@@ -72,7 +69,7 @@ pub fn exec_inner(code: &str, options: BFOptions) -> Result<String, JsError> {
                 let mut iter = code.maps.iter();
                 if *mem.get_value()? > 0 {
                     let s = iter.find(|[_, e]| i == *e).ok_or_else(|| {
-                        BFRuntimeError::new("Invalid source code: loop not found")
+                        BFRuntimeError::FailedToParseCode("loop not found".into())
                     })?[0];
                     i = s;
                 }
@@ -83,7 +80,7 @@ pub fn exec_inner(code: &str, options: BFOptions) -> Result<String, JsError> {
         count += 1;
     }
 
-    let output = String::try_from(output).map_err(|e| BFRuntimeError::new(&e.to_string()))?;
+    let output = String::try_from(output)?;
 
     Ok(output)
 }

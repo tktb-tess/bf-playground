@@ -1,26 +1,17 @@
-use serde::{Deserialize, Serialize};
-use std::error::Error;
-use std::fmt;
-use tsify::Tsify;
+use thiserror::Error;
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, Tsify)]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct BFRuntimeError {
-    pub message: String,
+#[derive(Debug, Clone, Error)]
+pub enum BFRuntimeError {
+    #[error("out of range\nindex: {index}, len: {len}")]
+    OutOfRange { index: usize, len: usize },
+    #[error("tried to allocate shorter memory than current")]
+    AllocShorterMemory,
+    #[error("exceeded limit of memory size: {0}")]
+    ExceededLimitMemSize(usize),
+    #[error("exceeded limit of loop: {0}")]
+    ExceededLimitLoopSize(usize),
+    #[error("fail to parse code: {0}")]
+    FailedToParseCode(String),
+    #[error("ran out of input")]
+    RanOutOfInput,
 }
-
-impl BFRuntimeError {
-    pub fn new(message: &str) -> Self {
-        Self {
-            message: message.into(),
-        }
-    }
-}
-
-impl fmt::Display for BFRuntimeError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.message.fmt(f)
-    }
-}
-
-impl Error for BFRuntimeError {}
