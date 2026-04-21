@@ -78,23 +78,24 @@ fn detect_loop(v: &[BFCommand]) -> Result<Box<[[usize; 2]]>, BFRuntimeError> {
     let mut maps = vec![];
     let mut idxs = vec![];
     for i in 0..v.len() {
-        let com = v
-            .get(i)
-            .ok_or_else(|| BFRuntimeError::new(&format!("Index was out of range: {}", i)))?;
+        let com = v.get(i).ok_or_else(|| BFRuntimeError::OutOfRange {
+            index: i,
+            len: v.len(),
+        })?;
 
         if let LoopStart = com {
             idxs.push(i);
         } else if let LoopEnd = com {
-            let start = idxs
-                .pop()
-                .ok_or_else(|| BFRuntimeError::new("Invalid code: No corresponding LoopStart"))?;
+            let start = idxs.pop().ok_or_else(|| {
+                BFRuntimeError::FailedToParseCode("no corresponding LoopStart".into())
+            })?;
             maps.push([start, i]);
         }
     }
 
     if idxs.len() > 0 {
-        Err(BFRuntimeError::new(
-            "Invalid code: No corresponding LoopEnd",
+        Err(BFRuntimeError::FailedToParseCode(
+            "no corresponding LoopEnd".into(),
         ))?;
     }
 
