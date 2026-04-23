@@ -1,5 +1,5 @@
 export type UnknownObj = {
-  [key: string | symbol]: unknown;
+  [key: PropertyKey]: unknown;
 };
 
 type BFRuntimeError = {
