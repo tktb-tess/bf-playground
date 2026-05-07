@@ -1,6 +1,5 @@
 use super::error::BFRuntimeError;
 use std::ops::{Deref, DerefMut};
-use std::result;
 use std::str::FromStr;
 
 #[derive(Debug, Clone)]
@@ -15,21 +14,19 @@ pub enum BFCommand {
     LoopEnd,
 }
 
-impl TryFrom<u8> for BFCommand {
-    type Error = ();
-
-    fn try_from(value: u8) -> result::Result<Self, Self::Error> {
+impl BFCommand {
+    fn new(value: u8) -> Option<Self> {
         use BFCommand::*;
         match value {
-            0x3e => Ok(Next),
-            0x3c => Ok(Prev),
-            0x2b => Ok(Increment),
-            0x2d => Ok(Decrement),
-            0x2e => Ok(Read),
-            0x2c => Ok(Write),
-            0x5b => Ok(LoopStart),
-            0x5d => Ok(LoopEnd),
-            _ => Err(()),
+            0x3e => Some(Next),
+            0x3c => Some(Prev),
+            0x2b => Some(Increment),
+            0x2d => Some(Decrement),
+            0x2e => Some(Read),
+            0x2c => Some(Write),
+            0x5b => Some(LoopStart),
+            0x5d => Some(LoopEnd),
+            _ => None,
         }
     }
 }
@@ -60,12 +57,11 @@ impl FromStr for BFCode {
         let mut v = Vec::with_capacity(s.len());
 
         for c in s.as_bytes() {
-            if let Ok(c) = BFCommand::try_from(*c) {
+            if let Some(c) = BFCommand::new(*c) {
                 v.push(c);
             }
         }
 
-        v.shrink_to_fit();
         let v = v.into_boxed_slice();
         let maps = detect_loop(&v)?;
 

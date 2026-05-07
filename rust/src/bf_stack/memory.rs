@@ -44,6 +44,10 @@ impl BFMemory {
     fn realloc(&mut self, new_len: usize) -> BFResult<()> {
         let len = self.stack.len();
 
+        if len == new_len {
+            return Ok(());
+        }
+
         if len > new_len {
             Err(BFRuntimeError::AllocShorterMemory)?;
         }

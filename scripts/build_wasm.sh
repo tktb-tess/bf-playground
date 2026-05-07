@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 echo "Removing previous WebAssembly files ..."
 rm -rf ./src/lib/wasm
 

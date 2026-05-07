@@ -1,9 +1,6 @@
 import init, { exec_inner } from './wasm/wasm_part';
-import {
-  postSuccess,
-  postFailed,
-  type WorkerMessage,
-} from '@tktb-tess/util-fns/async_worker';
+import type { WorkerMessage } from '@tktb-tess/util-fns/async_worker';
+import { postSuccess, postFailed } from '@tktb-tess/util-fns/async_worker/post';
 import type { BFMessage } from './worker_types';
 
 let initialized = false;
