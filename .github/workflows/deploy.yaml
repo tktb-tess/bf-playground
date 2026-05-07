@@ -45,7 +45,7 @@ jobs:
 
       - name: Install wasm-bindgen-cli & wasm-opt
         run: |
-          cargo install wasm-bindgen-cli --version 0.2.118
+          cargo install wasm-bindgen-cli --version 0.2.121
           cargo install wasm-opt --version 0.116.1
 
       - name: Compile to wasm
